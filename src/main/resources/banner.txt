@@ -1,0 +1,1 @@
+${AnsiColor.BRIGHT_MAGENTA} URL: ${spring.ai.mistralai.chat.base-url}

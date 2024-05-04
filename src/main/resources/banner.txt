@@ -1,1 +1,17 @@
-${AnsiColor.BRIGHT_MAGENTA} URL: ${spring.ai.mistralai.chat.base-url}
+${AnsiColor.BRIGHT_YELLOW}               |\     _,,,--,,_
+${AnsiColor.BRIGHT_YELLOW}             /,`.-'`'   ._  \-;;,_
+${AnsiColor.BRIGHT_GREEN}>>>>>>>>>>>>|,4-  ) )_   .;.(__`'-'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+${AnsiColor.BRIGHT_CYAN}           '---''(_/._)-'(_\_)                     ${AnsiColor.MAGENTA}1dataops.com
+${AnsiColor.BRIGHT_CYAN}██╗   ██╗███████╗██╗   ██╗    ██████╗ ██╗   ██╗██████╗ ██╗   ██╗
+${AnsiColor.BRIGHT_CYAN}╚██╗ ██╔╝██╔════╝╚██╗ ██╔╝   ██╔════╝ ██║   ██║██╔══██╗██║   ██║
+${AnsiColor.BRIGHT_CYAN} ╚████╔╝ ███████╗ ╚████╔╝    ██║  ███╗██║   ██║██████╔╝██║   ██║
+${AnsiColor.BRIGHT_YELLOW}  ╚██╔╝  ╚════██║  ╚██╔╝     ██║   ██║██║   ██║██╔══██╗██║   ██║
+${AnsiColor.BRIGHT_MAGENTA}   ██║   ███████║   ██║   ██╗╚██████╔╝╚██████╔╝██║  ██║╚██████╔╝
+   ╚═╝   ╚══════╝   ╚═╝   ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝
+${AnsiColor.YELLOW}IN CODE WE TRUST
+${AnsiColor.WHITE}---- Application Name: ${spring.application.name}: ${spring.application.version}
+---- Application Description:
+----     ${spring.application.description};
+---- Spring boot-${spring-boot.version}; ${jdk.vendor.name}-${jdk.vendor.version}; Gradle-${gradle.version} (${gradle.DSL});
+---- ${spring.jpa.database.platform}: ${spring.jpa.database.version}
+${AnsiColor.BRIGHT_MAGENTA}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

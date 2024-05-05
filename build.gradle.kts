@@ -17,11 +17,15 @@ repositories {
 }
 
 extra["springAiVersion"] = "0.8.1"
+extra["openAPIVersion"] = "2.5.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.ai:spring-ai-mistral-ai-spring-boot-starter")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    // OpenAPI
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("openAPIVersion")}")
 
     // lombok
     compileOnly("org.projectlombok:lombok")

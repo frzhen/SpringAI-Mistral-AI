@@ -1,5 +1,6 @@
 package guru.ysy.aidemo.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import reactor.core.publisher.Flux;
  * @Date: 2024/5/4 20:39
  * @Email: fred.zhen@gmail.com
  */
+@Slf4j
 @SpringBootTest
 class MistralAiServiceImplTest {
 
@@ -22,6 +24,6 @@ class MistralAiServiceImplTest {
 
         System.out.println("Got the answer:");
         Flux<ChatResponse> answer = mistralAiService.getAnswer("tell me a funny joke about dog");
-        answer.doOnNext(value->System.out.print(value.getResult().getOutput().getContent())).blockLast();
+        answer.doOnNext(value-> System.out.print(value.getResult().getOutput().getContent())).blockLast();
     }
 }

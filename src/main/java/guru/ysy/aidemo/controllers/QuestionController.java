@@ -4,6 +4,8 @@ import guru.ysy.aidemo.model.Answer;
 import guru.ysy.aidemo.model.GetCapitalRequest;
 import guru.ysy.aidemo.model.Question;
 import guru.ysy.aidemo.services.MistralAiService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +24,12 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "Question Controller", description = "Endpoints for asking questions")
 public class QuestionController {
 
     private final MistralAiService mistralAiService;
 
+    @Operation(summary = "Ask a question to Mistral AI")
     @PostMapping("/ask")
     public Mono<ResponseEntity<List<Answer>>> askQuestion(@RequestBody Question question) {
         return mistralAiService.getAnswer(question)
@@ -34,6 +38,7 @@ public class QuestionController {
                 .defaultIfEmpty(ResponseEntity.noContent().build());
     }
 
+    @Operation(summary = "Ask the name of state or country's capital to Mistral AI")
     @PostMapping("/capital")
     public Mono<ResponseEntity<List<Answer>>> capitalQuestion(@RequestBody GetCapitalRequest request) {
         log.info("Got the request: {}", request);

@@ -9,8 +9,12 @@ import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.mistralai.MistralAiChatClient;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+
+import java.util.Map;
 
 /**
  * @Author: Fred R. Zhen
@@ -21,6 +25,9 @@ import reactor.core.publisher.Flux;
 @Service
 @RequiredArgsConstructor
 public class MistralAiServiceImpl implements MistralAiService {
+
+    @Value("classpath:templates/get-capital-prompt.st")
+    private Resource getCapitalPromptTemplate;
 
     private final MistralAiChatClient chatClient;
     @Override
@@ -38,10 +45,8 @@ public class MistralAiServiceImpl implements MistralAiService {
 
     @Override
     public Flux<Answer> getCapital(GetCapitalRequest request) {
-        PromptTemplate promptTemplate = new PromptTemplate("What is the capital of "
-                                                           + request.stateOrCountry() + "?");
-        Prompt prompt = promptTemplate.create();
-        log.info("Got the prompt: {}", prompt);
+        PromptTemplate promptTemplate = new PromptTemplate(getCapitalPromptTemplate);
+        Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", request.stateOrCountry()));
         Flux<ChatResponse> response = chatClient.stream(prompt);
         return response
                 .map(chatResponse -> new Answer(chatResponse.getResult().getOutput().getContent()));

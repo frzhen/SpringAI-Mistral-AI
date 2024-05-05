@@ -41,7 +41,6 @@ public class QuestionController {
     @Operation(summary = "Ask the name of state or country's capital to Mistral AI")
     @PostMapping("/capital")
     public Mono<ResponseEntity<List<Answer>>> capitalQuestion(@RequestBody GetCapitalRequest request) {
-        log.info("Got the request: {}", request);
         return mistralAiService.getCapital(request)
                 .collectList()
                 .map(ResponseEntity::ok)

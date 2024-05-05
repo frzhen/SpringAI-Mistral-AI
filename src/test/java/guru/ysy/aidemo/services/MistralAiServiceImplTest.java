@@ -21,7 +21,7 @@ class MistralAiServiceImplTest {
     void getAnswer() {
 
         System.out.println("Got the answer:");
-        Flux<ChatResponse> answer = mistralAiService.getAnswer("Tell me a funny joke about rabbits");
+        Flux<ChatResponse> answer = mistralAiService.getAnswer("tell me a funny joke about dog");
         answer.doOnNext(value->System.out.print(value.getResult().getOutput().getContent())).blockLast();
     }
 }

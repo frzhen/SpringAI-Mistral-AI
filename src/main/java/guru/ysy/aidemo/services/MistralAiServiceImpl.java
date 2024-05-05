@@ -1,5 +1,7 @@
 package guru.ysy.aidemo.services;
 
+import guru.ysy.aidemo.model.Answer;
+import guru.ysy.aidemo.model.Question;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -21,5 +23,11 @@ public class MistralAiServiceImpl implements MistralAiService {
     public Flux<ChatResponse> getAnswer(String question) {
 
         return chatClient.stream(new Prompt(question));
+    }
+
+    @Override
+    public Flux<Answer> getAnswer(Question question) {
+        Flux<ChatResponse> response = chatClient.stream(new Prompt(question.question()));
+        return response.map(chatResponse -> new Answer(chatResponse.getResult().getOutput().getContent()));
     }
 }

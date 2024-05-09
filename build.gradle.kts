@@ -34,6 +34,9 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
 
+    // spring boot developer tools
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+
     // explicit declare JUnit5 for testing ready for gradle 9
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

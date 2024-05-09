@@ -15,6 +15,11 @@ spring:
       enabled: always
   config:
     import: classpath:env/Mistral.env[.properties]
+  devtools:
+    restart:
+      enabled: true
+      exclude: static/**, public/**
+      additional-paths: src/test/resources/**
   ai:
     mistralai:
       api-key: ${MISTRAL_API_KEY}

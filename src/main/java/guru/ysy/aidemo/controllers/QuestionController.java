@@ -46,4 +46,13 @@ public class QuestionController {
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.noContent().build());
     }
+
+    @Operation(summary = "Ask the name of state or country's capital with detail info to Mistral AI")
+    @PostMapping("/capitalWithInfo")
+    public Mono<ResponseEntity<List<Answer>>> capitalQuestionWithInfo(@RequestBody GetCapitalRequest request) {
+        return mistralAiService.getCapitalWithInfo(request)
+                .collectList()
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.noContent().build());
+    }
 }

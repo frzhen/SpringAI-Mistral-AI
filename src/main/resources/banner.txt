@@ -13,5 +13,4 @@ ${AnsiColor.WHITE}---- Application Name: ${spring.application.name}: ${spring.ap
 ---- Application Description:
 ----     ${spring.application.description};
 ---- Spring boot-${spring-boot.version}; ${jdk.vendor.name}-${jdk.vendor.version}; Gradle-${gradle.version} (${gradle.DSL});
----- ${spring.jpa.database.platform}: ${spring.jpa.database.version}
 ${AnsiColor.BRIGHT_MAGENTA}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

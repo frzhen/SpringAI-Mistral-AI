@@ -3,6 +3,7 @@ package guru.ysy.aidemo.services;
 import guru.ysy.aidemo.model.Answer;
 import guru.ysy.aidemo.model.GetCapitalRequest;
 import guru.ysy.aidemo.model.Question;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.ChatResponse;
@@ -29,12 +30,11 @@ public class MistralAiServiceImpl implements MistralAiService {
     @Value("classpath:templates/get-capital-prompt.st")
     private Resource getCapitalPromptTemplate;
 
-    private final MistralAiChatClient chatClient;
-    @Override
-    public Flux<ChatResponse> getAnswer(String question) {
+    @Value("classpath:templates/get-capital-with-info.st")
+    private Resource getCapitalWithInfoPromptTemplate;
 
-        return chatClient.stream(new Prompt(question));
-    }
+    private final MistralAiChatClient chatClient;
+
 
     @Override
     public Flux<Answer> getAnswer(Question question) {
@@ -50,5 +50,23 @@ public class MistralAiServiceImpl implements MistralAiService {
         Flux<ChatResponse> response = chatClient.stream(prompt);
         return response
                 .map(chatResponse -> new Answer(chatResponse.getResult().getOutput().getContent()));
+    }
+
+    @Override
+    public Flux<Answer> getCapitalWithInfo(GetCapitalRequest request) {
+        return getCapitalFlux(request, getCapitalWithInfoPromptTemplate);
+    }
+
+    @NotNull
+    private Flux<Answer> getCapitalFlux(GetCapitalRequest request, Resource getCapitalTemplate) {
+        PromptTemplate promptTemplate = new PromptTemplate(getCapitalTemplate);
+        Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", request.stateOrCountry()));
+        Flux<ChatResponse> response = chatClient.stream(prompt);
+        return response
+                .map(chatResponse ->
+                        AnswerUtils.stringCleanUp(new Answer(chatResponse
+                                .getResult()
+                                .getOutput()
+                                .getContent())));
     }
 }

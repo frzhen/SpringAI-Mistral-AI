@@ -20,5 +20,5 @@ spring:
       api-key: ${MISTRAL_API_KEY}
       chat:
         options:
-          model: mistral-large-latest
+          model: mistral-small-latest
           temperature: 0.7

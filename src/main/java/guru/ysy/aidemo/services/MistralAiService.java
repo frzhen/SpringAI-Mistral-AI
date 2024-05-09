@@ -3,7 +3,6 @@ package guru.ysy.aidemo.services;
 import guru.ysy.aidemo.model.Answer;
 import guru.ysy.aidemo.model.GetCapitalRequest;
 import guru.ysy.aidemo.model.Question;
-import org.springframework.ai.chat.ChatResponse;
 import reactor.core.publisher.Flux;
 
 /**
@@ -13,9 +12,9 @@ import reactor.core.publisher.Flux;
  */
 public interface MistralAiService {
 
-    Flux<ChatResponse> getAnswer(String question);
-
     Flux<Answer> getAnswer(Question question);
 
     Flux<Answer> getCapital(GetCapitalRequest request);
+
+    Flux<Answer> getCapitalWithInfo(GetCapitalRequest request);
 }

@@ -11,6 +11,10 @@ java {
     sourceCompatibility = JavaVersion.VERSION_21
 }
 
+springBoot {
+    buildInfo()
+}
+
 repositories {
     mavenCentral()
     maven { url = uri("https://repo.spring.io/milestone") }
@@ -23,6 +27,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.ai:spring-ai-mistral-ai-spring-boot-starter")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    // spring boot actuator
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     // OpenAPI
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("openAPIVersion")}")

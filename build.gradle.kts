@@ -22,6 +22,7 @@ repositories {
 
 extra["springAiVersion"] = "0.8.1"
 extra["openAPIVersion"] = "2.5.0"
+extra["prometheusVersion"] = "1.12.5"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -30,6 +31,9 @@ dependencies {
 
     // spring boot actuator
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+
+    // Prometheus
+    implementation("io.micrometer:micrometer-registry-prometheus:${property("prometheusVersion")}")
 
     // OpenAPI
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("openAPIVersion")}")

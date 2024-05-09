@@ -6,13 +6,10 @@ import guru.ysy.aidemo.model.Answer;
 import guru.ysy.aidemo.model.GetCapitalRequest;
 import guru.ysy.aidemo.model.Question;
 import guru.ysy.aidemo.services.MistralAiServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
@@ -20,7 +17,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +27,9 @@ import static org.mockito.BDDMockito.given;
  * @Date: 2024/5/5 21:48
  * @Email: fred.zhen@gmail.com
  */
+@Order(31)
 @WebFluxTest(QuestionController.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class QuestionControllerMockTest {
 
     @Autowired
@@ -53,7 +51,9 @@ class QuestionControllerMockTest {
         getCapitalRequest = new GetCapitalRequest("China");
     }
 
+    @Order(1)
     @Test
+    @DisplayName("Ask a String Question Test")
     void askQuestion() {
         Answer answer1 = new Answer("Answer 1");
         Answer answer2 = new Answer("Answer 2");
@@ -72,8 +72,9 @@ class QuestionControllerMockTest {
                 .value(answers -> assertThat(answers).containsExactlyInAnyOrder(answer1, answer2, answer3));
     }
 
+    @Order(2)
     @Test
-    @DisplayName("Capital Question Test")
+    @DisplayName("Test State Or Country Capital Question return JSON with 1 answer")
     void capitalQuestion() {
         Answer capitalAnswer = new Answer("Beijing");
         given(mistralAiServiceImpl.getCapital(getCapitalRequest)).willReturn(capitalAnswer);
@@ -87,7 +88,9 @@ class QuestionControllerMockTest {
                 .value(answers -> assertThat(answers).containsExactlyInAnyOrder(capitalAnswer));
     }
 
+    @Order(3)
     @Test
+    @DisplayName("Test State Or Country Capital Question with detail info")
     void capitalQuestionWithInfo() throws IOException {
         String filePath = "src/test/resources/capital-with-info-test.json";
         File file = new File(filePath);

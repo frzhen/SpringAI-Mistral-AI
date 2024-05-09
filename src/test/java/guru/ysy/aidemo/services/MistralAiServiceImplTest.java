@@ -4,7 +4,7 @@ import guru.ysy.aidemo.model.Answer;
 import guru.ysy.aidemo.model.GetCapitalRequest;
 import guru.ysy.aidemo.model.Question;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Flux;
@@ -18,13 +18,16 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
  * @Date: 2024/5/4 20:39
  * @Email: fred.zhen@gmail.com
  */
+@Order(21)
 @Slf4j
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class MistralAiServiceImplTest {
 
     @Autowired
     MistralAiService mistralAiService;
 
+    @Order(1)
     @Test
     void getAnswer() {
         Question newQuestion = new Question("tell me a funny joke about dog");
@@ -39,6 +42,7 @@ class MistralAiServiceImplTest {
         answerList.forEach(answer -> System.out.print(answer.answer()));
     }
 
+    @Order(2)
     @Test
     void getCapital() {
         GetCapitalRequest request = new GetCapitalRequest("China");
@@ -50,6 +54,7 @@ class MistralAiServiceImplTest {
         System.out.println(answer.answer());
     }
 
+    @Order(3)
     @Test
     void getCapitalWithInfo() {
         GetCapitalRequest request = new GetCapitalRequest("China");

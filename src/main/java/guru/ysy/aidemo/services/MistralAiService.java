@@ -14,7 +14,7 @@ public interface MistralAiService {
 
     Flux<Answer> getAnswer(Question question);
 
-    Flux<Answer> getCapital(GetCapitalRequest request);
+    Answer getCapital(GetCapitalRequest request);
 
     Flux<Answer> getCapitalWithInfo(GetCapitalRequest request);
 }

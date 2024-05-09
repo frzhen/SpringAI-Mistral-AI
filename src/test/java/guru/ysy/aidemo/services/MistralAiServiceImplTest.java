@@ -44,11 +44,10 @@ class MistralAiServiceImplTest {
         GetCapitalRequest request = new GetCapitalRequest("China");
         System.out.printf("Got the capital answer for: %s%n", request.stateOrCountry());
 
-        Flux<Answer> answerFlux = mistralAiService.getCapital(request);
-        List<Answer> answerList = answerFlux.collectList().block();
-        assertThat(answerList).isNotNull();
-        assert answerList != null;
-        answerList.forEach(answer -> System.out.print(answer.answer()));
+        Answer answer = mistralAiService.getCapital(request);
+        assertThat(answer.answer()).isNotNull();
+        assertThat(answer.answer()).isEqualTo("Beijing");
+        System.out.println(answer.answer());
     }
 
     @Test
@@ -62,6 +61,4 @@ class MistralAiServiceImplTest {
         assert answerList != null;
         answerList.forEach(answer -> System.out.print(answer.answer()));
     }
-
-
 }

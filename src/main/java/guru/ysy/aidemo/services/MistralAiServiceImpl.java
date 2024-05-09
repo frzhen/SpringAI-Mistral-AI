@@ -1,5 +1,8 @@
 package guru.ysy.aidemo.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.ysy.aidemo.model.Answer;
 import guru.ysy.aidemo.model.GetCapitalRequest;
 import guru.ysy.aidemo.model.Question;
@@ -35,6 +38,7 @@ public class MistralAiServiceImpl implements MistralAiService {
 
     private final MistralAiChatClient chatClient;
 
+    private final ObjectMapper mapper;
 
     @Override
     public Flux<Answer> getAnswer(Question question) {
@@ -44,12 +48,20 @@ public class MistralAiServiceImpl implements MistralAiService {
     }
 
     @Override
-    public Flux<Answer> getCapital(GetCapitalRequest request) {
+    public Answer getCapital(GetCapitalRequest request) {
         PromptTemplate promptTemplate = new PromptTemplate(getCapitalPromptTemplate);
         Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", request.stateOrCountry()));
-        Flux<ChatResponse> response = chatClient.stream(prompt);
-        return response
-                .map(chatResponse -> new Answer(chatResponse.getResult().getOutput().getContent()));
+        ChatResponse response = chatClient.call(prompt);
+
+        String responseString;
+        try {
+            JsonNode jsonNode = mapper.readTree(response.getResult().getOutput().getContent());
+            responseString = jsonNode.get("answer").asText();
+        } catch (JsonProcessingException e) {
+            log.error("Mistral AI response format error", e);
+            responseString = "Mistral AI response format error";
+        }
+        return new Answer(responseString);
     }
 
     @Override

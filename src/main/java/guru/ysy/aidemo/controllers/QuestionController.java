@@ -40,11 +40,8 @@ public class QuestionController {
 
     @Operation(summary = "Ask the name of state or country's capital to Mistral AI")
     @PostMapping("/capital")
-    public Mono<ResponseEntity<List<Answer>>> capitalQuestion(@RequestBody GetCapitalRequest request) {
-        return mistralAiService.getCapital(request)
-                .collectList()
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.noContent().build());
+    public Answer capitalQuestion(@RequestBody GetCapitalRequest request) {
+        return mistralAiService.getCapital(request);
     }
 
     @Operation(summary = "Ask the name of state or country's capital with detail info to Mistral AI")

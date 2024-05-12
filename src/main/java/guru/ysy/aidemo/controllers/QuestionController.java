@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "Question Controller", description = "Endpoints for asking questions")
+@Tag(name = "Question Controller", description = "Endpoints for asking questions to Mistral AI inference Endpoint")
 public class QuestionController {
 
     private final MistralAiService mistralAiService;

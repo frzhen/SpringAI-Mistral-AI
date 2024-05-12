@@ -47,6 +47,7 @@ public class MistralAiServiceImpl implements MistralAiService {
                 .map(chatResponse -> new Answer(chatResponse.getResult().getOutput().getContent()));
     }
 
+
     @Override
     public Answer getCapital(GetCapitalRequest request) {
         PromptTemplate promptTemplate = new PromptTemplate(getCapitalPromptTemplate);

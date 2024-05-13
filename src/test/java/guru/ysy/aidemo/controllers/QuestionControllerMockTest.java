@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.ysy.aidemo.model.Answer;
 import guru.ysy.aidemo.model.GetCapitalRequest;
+import guru.ysy.aidemo.model.GetCapitalResponse;
 import guru.ysy.aidemo.model.Question;
 import guru.ysy.aidemo.services.MistralAiServiceImpl;
 import org.junit.jupiter.api.*;
@@ -76,7 +77,7 @@ class QuestionControllerMockTest {
     @Test
     @DisplayName("Test State Or Country Capital Question return JSON with 1 answer")
     void capitalQuestion() {
-        Answer capitalAnswer = new Answer("Beijing");
+        GetCapitalResponse capitalAnswer = new GetCapitalResponse("Beijing");
         given(mistralAiServiceImpl.getCapital(getCapitalRequest)).willReturn(capitalAnswer);
         webTestClient.post().uri("/capital")
                 .body(Mono.just(getCapitalRequest), GetCapitalRequest.class)
@@ -84,8 +85,9 @@ class QuestionControllerMockTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBodyList(Answer.class).hasSize(1)
-                .value(answers -> assertThat(answers).containsExactlyInAnyOrder(capitalAnswer));
+                .expectBodyList(GetCapitalResponse.class).hasSize(1)
+                .value(answers -> assertThat(answers)
+                        .containsExactlyInAnyOrder(capitalAnswer));
     }
 
     @Order(3)

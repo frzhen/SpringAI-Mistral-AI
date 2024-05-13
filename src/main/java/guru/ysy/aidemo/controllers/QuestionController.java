@@ -2,6 +2,7 @@ package guru.ysy.aidemo.controllers;
 
 import guru.ysy.aidemo.model.Answer;
 import guru.ysy.aidemo.model.GetCapitalRequest;
+import guru.ysy.aidemo.model.GetCapitalResponse;
 import guru.ysy.aidemo.model.Question;
 import guru.ysy.aidemo.services.MistralAiService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,7 +41,7 @@ public class QuestionController {
 
     @Operation(summary = "Ask the name of state or country's capital to Mistral AI")
     @PostMapping("/capital")
-    public Answer capitalQuestion(@RequestBody GetCapitalRequest request) {
+    public GetCapitalResponse capitalQuestion(@RequestBody GetCapitalRequest request) {
         return mistralAiService.getCapital(request);
     }
 

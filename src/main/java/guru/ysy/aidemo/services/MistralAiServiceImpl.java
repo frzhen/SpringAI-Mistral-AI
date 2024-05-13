@@ -1,10 +1,8 @@
 package guru.ysy.aidemo.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.ysy.aidemo.model.Answer;
 import guru.ysy.aidemo.model.GetCapitalRequest;
+import guru.ysy.aidemo.model.GetCapitalResponse;
 import guru.ysy.aidemo.model.Question;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +11,7 @@ import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.mistralai.MistralAiChatClient;
+import org.springframework.ai.parser.BeanOutputParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -38,8 +37,6 @@ public class MistralAiServiceImpl implements MistralAiService {
 
     private final MistralAiChatClient chatClient;
 
-    private final ObjectMapper mapper;
-
     @Override
     public Flux<Answer> getAnswer(Question question) {
         Flux<ChatResponse> response = chatClient.stream(new Prompt(question.question()));
@@ -49,20 +46,20 @@ public class MistralAiServiceImpl implements MistralAiService {
 
 
     @Override
-    public Answer getCapital(GetCapitalRequest request) {
+    public GetCapitalResponse getCapital(GetCapitalRequest request) {
+        BeanOutputParser<GetCapitalResponse> parser = new BeanOutputParser<>(GetCapitalResponse.class);
+        String format = parser.getFormat();
+        log.info("format: \n {}", format);
         PromptTemplate promptTemplate = new PromptTemplate(getCapitalPromptTemplate);
-        Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", request.stateOrCountry()));
+        Prompt prompt = promptTemplate.create(Map.of(
+                "stateOrCountry",
+                request.stateOrCountry(),
+                "format",
+                format));
         ChatResponse response = chatClient.call(prompt);
+        log.info("response: \n {}", response.getResult().getOutput().getContent());
 
-        String responseString;
-        try {
-            JsonNode jsonNode = mapper.readTree(response.getResult().getOutput().getContent());
-            responseString = jsonNode.get("answer").asText();
-        } catch (JsonProcessingException e) {
-            log.error("Mistral AI response format error", e);
-            responseString = "Mistral AI response format error";
-        }
-        return new Answer(responseString);
+        return parser.parse(response.getResult().getOutput().getContent());
     }
 
     @Override

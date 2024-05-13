@@ -2,6 +2,7 @@ package guru.ysy.aidemo.services;
 
 import guru.ysy.aidemo.model.Answer;
 import guru.ysy.aidemo.model.GetCapitalRequest;
+import guru.ysy.aidemo.model.GetCapitalResponse;
 import guru.ysy.aidemo.model.Question;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -48,7 +49,7 @@ class MistralAiServiceImplTest {
         GetCapitalRequest request = new GetCapitalRequest("China");
         System.out.printf("Got the capital answer for: %s%n", request.stateOrCountry());
 
-        Answer answer = mistralAiService.getCapital(request);
+        GetCapitalResponse answer = mistralAiService.getCapital(request);
         assertThat(answer.answer()).isNotNull();
         assertThat(answer.answer()).isEqualTo("Beijing");
         System.out.println(answer.answer());

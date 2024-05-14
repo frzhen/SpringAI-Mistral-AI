@@ -1,9 +1,6 @@
 package guru.ysy.aidemo.controllers;
 
-import guru.ysy.aidemo.model.Answer;
-import guru.ysy.aidemo.model.GetCapitalRequest;
-import guru.ysy.aidemo.model.GetCapitalResponse;
-import guru.ysy.aidemo.model.Question;
+import guru.ysy.aidemo.model.*;
 import guru.ysy.aidemo.services.MistralAiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,10 +44,7 @@ public class QuestionController {
 
     @Operation(summary = "Ask the name of state or country's capital with detail info to Mistral AI")
     @PostMapping("/capitalWithInfo")
-    public Mono<ResponseEntity<List<Answer>>> capitalQuestionWithInfo(@RequestBody GetCapitalRequest request) {
-        return mistralAiService.getCapitalWithInfo(request)
-                .collectList()
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.noContent().build());
+    public GetCapitalWithInfoResponse capitalQuestionWithInfo(@RequestBody GetCapitalRequest request) {
+        return mistralAiService.getCapitalWithInfo(request);
     }
 }

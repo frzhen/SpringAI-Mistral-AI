@@ -1,9 +1,7 @@
 package guru.ysy.aidemo.services;
 
-import guru.ysy.aidemo.model.Answer;
-import guru.ysy.aidemo.model.GetCapitalRequest;
-import guru.ysy.aidemo.model.GetCapitalResponse;
-import guru.ysy.aidemo.model.Question;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import guru.ysy.aidemo.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,9 @@ class MistralAiServiceImplTest {
 
     @Autowired
     MistralAiService mistralAiService;
+
+    @Autowired
+    ObjectMapper mapper;
 
     @Order(1)
     @Test
@@ -61,10 +62,8 @@ class MistralAiServiceImplTest {
         GetCapitalRequest request = new GetCapitalRequest("China");
         System.out.printf("Got the capital answer with detail information for: %s%n", request.stateOrCountry());
 
-        Flux<Answer> answerFlux = mistralAiService.getCapitalWithInfo(request);
-        List<Answer> answerList = answerFlux.collectList().block();
-        assertThat(answerList).isNotNull();
-        assert answerList != null;
-        answerList.forEach(answer -> System.out.print(answer.answer()));
+        GetCapitalWithInfoResponse answer = mistralAiService.getCapitalWithInfo(request);
+        assertThat(answer).isNotNull();
+        System.out.println(answer);
     }
 }

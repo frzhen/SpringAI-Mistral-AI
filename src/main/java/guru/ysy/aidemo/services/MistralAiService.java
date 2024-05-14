@@ -1,9 +1,6 @@
 package guru.ysy.aidemo.services;
 
-import guru.ysy.aidemo.model.Answer;
-import guru.ysy.aidemo.model.GetCapitalRequest;
-import guru.ysy.aidemo.model.GetCapitalResponse;
-import guru.ysy.aidemo.model.Question;
+import guru.ysy.aidemo.model.*;
 import reactor.core.publisher.Flux;
 
 /**
@@ -17,5 +14,5 @@ public interface MistralAiService {
 
     GetCapitalResponse getCapital(GetCapitalRequest request);
 
-    Flux<Answer> getCapitalWithInfo(GetCapitalRequest request);
+    GetCapitalWithInfoResponse getCapitalWithInfo(GetCapitalRequest request);
 }

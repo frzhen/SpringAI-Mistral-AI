@@ -1,12 +1,9 @@
 package guru.ysy.aidemo.controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.ysy.aidemo.model.Answer;
-import guru.ysy.aidemo.model.GetCapitalRequest;
-import guru.ysy.aidemo.model.GetCapitalResponse;
-import guru.ysy.aidemo.model.Question;
+import guru.ysy.aidemo.model.*;
 import guru.ysy.aidemo.services.MistralAiServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -15,10 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -29,6 +22,7 @@ import static org.mockito.BDDMockito.given;
  * @Email: fred.zhen@gmail.com
  */
 @Order(31)
+@Slf4j
 @WebFluxTest(QuestionController.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class QuestionControllerMockTest {
@@ -93,13 +87,16 @@ class QuestionControllerMockTest {
     @Order(3)
     @Test
     @DisplayName("Test State Or Country Capital Question with detail info")
-    void capitalQuestionWithInfo() throws IOException {
-        String filePath = "src/test/resources/capital-with-info-test.json";
-        File file = new File(filePath);
-        List<Answer> answerList= mapper.readValue(file, new TypeReference<>() {
-        });
-        Flux<Answer> answerFlux = Flux.fromIterable(answerList);
-        given(mistralAiServiceImpl.getCapitalWithInfo(getCapitalRequest)).willReturn(answerFlux);
+    void capitalQuestionWithInfo() {
+        GetCapitalWithInfoResponse answer = new GetCapitalWithInfoResponse(
+                "Beijing",
+                21.2,
+                "Asia",
+                "Chinese",
+                "CNY",
+                39.9,
+                116.4);
+        given(mistralAiServiceImpl.getCapitalWithInfo(getCapitalRequest)).willReturn(answer);
 
         webTestClient.post().uri("/capitalWithInfo")
                 .body(Mono.just(getCapitalRequest), GetCapitalRequest.class)
@@ -107,7 +104,7 @@ class QuestionControllerMockTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBodyList(Answer.class).hasSize(51)
-                .value(answers -> assertThat(answers).containsExactlyInAnyOrderElementsOf(answerList));
+                .expectBodyList(GetCapitalWithInfoResponse.class).hasSize(1)
+                .value(response -> assertThat(response).containsExactlyInAnyOrder(answer));
     }
 }

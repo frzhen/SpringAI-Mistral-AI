@@ -1,10 +1,6 @@
 package guru.ysy.aidemo.services;
 
-import guru.ysy.aidemo.model.Answer;
-import guru.ysy.aidemo.model.GetCapitalRequest;
-import guru.ysy.aidemo.model.GetCapitalResponse;
-import guru.ysy.aidemo.model.Question;
-import jakarta.validation.constraints.NotNull;
+import guru.ysy.aidemo.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.ChatResponse;
@@ -32,9 +28,6 @@ public class MistralAiServiceImpl implements MistralAiService {
     @Value("classpath:templates/get-capital-prompt.st")
     private Resource getCapitalPromptTemplate;
 
-    @Value("classpath:templates/get-capital-with-info.st")
-    private Resource getCapitalWithInfoPromptTemplate;
-
     private final MistralAiChatClient chatClient;
 
     @Override
@@ -49,7 +42,6 @@ public class MistralAiServiceImpl implements MistralAiService {
     public GetCapitalResponse getCapital(GetCapitalRequest request) {
         BeanOutputParser<GetCapitalResponse> parser = new BeanOutputParser<>(GetCapitalResponse.class);
         String format = parser.getFormat();
-        log.info("format: \n {}", format);
         PromptTemplate promptTemplate = new PromptTemplate(getCapitalPromptTemplate);
         Prompt prompt = promptTemplate.create(Map.of(
                 "stateOrCountry",
@@ -57,26 +49,24 @@ public class MistralAiServiceImpl implements MistralAiService {
                 "format",
                 format));
         ChatResponse response = chatClient.call(prompt);
-        log.info("response: \n {}", response.getResult().getOutput().getContent());
 
         return parser.parse(response.getResult().getOutput().getContent());
     }
 
     @Override
-    public Flux<Answer> getCapitalWithInfo(GetCapitalRequest request) {
-        return getCapitalFlux(request, getCapitalWithInfoPromptTemplate);
+    public GetCapitalWithInfoResponse getCapitalWithInfo(GetCapitalRequest request) {
+        BeanOutputParser<GetCapitalWithInfoResponse> parser = new BeanOutputParser<>(
+                GetCapitalWithInfoResponse.class);
+        String format = parser.getFormat();
+
+        PromptTemplate promptTemplate = new PromptTemplate(getCapitalPromptTemplate);
+        Prompt prompt = promptTemplate.create(Map.of(
+                "stateOrCountry",
+                request.stateOrCountry(),
+                "format",
+                format));
+        ChatResponse response = chatClient.call(prompt);
+        return parser.parse(response.getResult().getOutput().getContent());
     }
 
-    @NotNull
-    private Flux<Answer> getCapitalFlux(GetCapitalRequest request, Resource getCapitalTemplate) {
-        PromptTemplate promptTemplate = new PromptTemplate(getCapitalTemplate);
-        Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", request.stateOrCountry()));
-        Flux<ChatResponse> response = chatClient.stream(prompt);
-        return response
-                .map(chatResponse ->
-                        AnswerUtils.stringCleanUp(new Answer(chatResponse
-                                .getResult()
-                                .getOutput()
-                                .getContent())));
-    }
 }

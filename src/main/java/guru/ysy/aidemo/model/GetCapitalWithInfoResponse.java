@@ -29,7 +29,7 @@ public record GetCapitalWithInfoResponse(
         @JsonPropertyDescription("This is the latitude of the city")
         Double latitude,
 
-        @JsonProperty("lng")
+        @JsonProperty("lon")
         @JsonPropertyDescription("This is the longitude of the city")
         Double longitude
 ) {

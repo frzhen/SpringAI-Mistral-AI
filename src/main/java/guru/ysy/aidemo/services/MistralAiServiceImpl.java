@@ -66,7 +66,7 @@ public class MistralAiServiceImpl implements MistralAiService {
                 "format",
                 format));
         ChatResponse response = chatClient.call(prompt);
-        return parser.parse(response.getResult().getOutput().getContent());
+        return parser.parse(response.getResult().getOutput().getContent().replaceAll("`*\n", "\n"));
     }
 
 }
